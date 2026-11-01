@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:insert="~{top :: top}"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:insert="~{header :: header}"></th:block> /*/-->
+
+    <h2>Roles</h2>
+
+    <div class="row">
+
+        <div class="col-sm-5">
+
+            <form class="form-horizontal"
+                  th:object="${entity}"
+                  th:action="@{/roles/search}"
+                  method="post">
+
+                <div class="row">
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{descrip}"/>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button type="submit"
+                                class="btn btn-success">
+                            Buscar
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col-sm-1">
+            <a class="btn btn-info"
+               th:href="@{/roles/refresh}">
+                Refrescar
+            </a>
+        </div>
+
+        <div class="col-sm-1">
+            <a class="btn btn-default"
+               th:href="@{/roles/create/0}">
+                Nuevo
+            </a>
+        </div>
+
+        <div class="col-sm-11">
+            <h5 style="color:red;"
+                th:text="${message}">
+            </h5>
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div th:if="${not #lists.isEmpty(entities)}">
+
+        <table class="table">
+
+            <tr>
+                <th>Id</th>
+                <th>Descripción</th>
+                <th>Editar</th>
+                <th>Borrar</th>
+            </tr>
+
+            <tr th:each="entity : ${entities}">
+
+                <td th:text="${entity.id}"></td>
+
+                <td th:text="${entity.descrip}"></td>
+
+                <td>
+                    <a class="btn btn-warning"
+                       th:href="@{/roles/edit/{id}(id=${entity.id})}">
+                        Editar
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-danger"
+                       th:href="@{/roles/delete/{id}(id=${entity.id})}">
+                        Borrar
+                    </a>
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

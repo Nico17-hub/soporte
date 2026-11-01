@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:insert="~{top :: top}"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:insert="~{header :: header}"></th:block> /*/-->
+
+    <h2>Reclamos</h2>
+
+    <div th:if="${cliente != null}">
+
+        <h4>
+            Cliente:
+            <span th:text="${cliente.nombre + ' ' + cliente.apellido}">
+                    </span>
+        </h4>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+
+        <div class="col-sm-2">
+
+            <a class="btn btn-default"
+               th:if="${cliente == null}"
+               th:href="@{/reclamos/create/0}">
+                Nuevo Reclamo
+            </a>
+
+            <a class="btn btn-default"
+               th:if="${cliente != null}"
+               th:href="@{/reclamos/create/{clienteId}(clienteId=${cliente.id})}">
+                Nuevo Reclamo
+            </a>
+
+        </div>
+
+        <div class="col-sm-2"
+             th:if="${cliente != null}">
+
+            <a class="btn btn-default"
+               th:href="@{/clientes}">
+                Volver a Clientes
+            </a>
+
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div th:if="${not #lists.isEmpty(entities)}">
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Asunto</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th>Servicio</th>
+                <th>Finalizado</th>
+                <th>Editar</th>
+                <th>Respuestas</th>
+                <th>Archivos</th>
+            </tr>
+
+            <tr th:each="entity : ${entities}">
+
+                <td th:text="${entity.fecha}"></td>
+
+                <td th:text="${entity.cliente.nombre + ' ' + entity.cliente.apellido}">
+                </td>
+
+                <td th:text="${entity.asunto}"></td>
+
+                <td th:text="${entity.motivo.descrip}"></td>
+
+                <td th:text="${entity.estado.descrip}"></td>
+
+                <td th:text="${entity.clienteservicio.servicio.descrip}">
+                </td>
+
+                <td th:text="${entity.finalizado ? 'Sí' : 'No'}">
+                </td>
+
+                <td>
+                    <a class="btn btn-warning"
+                       th:href="@{/reclamos/edit/{id}(id=${entity.id})}">
+                        Editar
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-primary"
+                       th:href="@{/reclamos/{id}/respuestas(id=${entity.id})}">
+                        Respuestas
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-default"
+                       th:href="@{/reclamos/{id}/files(id=${entity.id})}">
+                        Archivos
+                    </a>
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div th:if="${#lists.isEmpty(entities)}">
+
+        <div class="alert alert-info">
+            No hay reclamos registrados.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

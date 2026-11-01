@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:insert="~{top :: top}"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:insert="~{header :: header}"></th:block> /*/-->
+
+    <h2>Reclamo</h2>
+
+    <br>
+
+    <form class="form-horizontal"
+          th:object="${entity}"
+          th:action="@{/reclamos}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}"/>
+
+        <!-- CLIENTE YA SELECCIONADO -->
+
+        <div class="form-group"
+             th:if="${clienteSeleccionado}">
+
+            <label class="control-label col-sm-2">
+                Cliente:
+            </label>
+
+            <div class="col-sm-5">
+
+                <p class="form-control-static"
+                   th:text="${entity.cliente.nombre + ' ' + entity.cliente.apellido}">
+                </p>
+
+                <input type="hidden"
+                       th:field="*{cliente.id}"/>
+
+            </div>
+
+        </div>
+
+
+        <!-- SELECCIONAR CLIENTE -->
+
+        <div class="form-group"
+             th:if="${!clienteSeleccionado}">
+
+            <label class="control-label col-sm-2">
+                Cliente:
+            </label>
+
+            <div class="col-sm-5">
+
+                <select class="form-control"
+                        th:field="*{cliente.id}">
+
+                    <option th:each="cliente : ${clientes}"
+                            th:value="${cliente.id}"
+                            th:text="${cliente.nombre + ' ' + cliente.apellido}">
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- SERVICIO -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Servicio:
+            </label>
+
+            <div class="col-sm-5">
+
+                <select class="form-control"
+                        th:field="*{clienteservicio.id}">
+
+                    <option th:each="contrato : ${contratos}"
+                            th:value="${contrato.id}"
+                            th:text="${contrato.servicio.descrip}">
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- MOTIVO -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Motivo:
+            </label>
+
+            <div class="col-sm-5">
+
+                <select class="form-control"
+                        th:field="*{motivo.id}">
+
+                    <option th:each="motivo : ${motivos}"
+                            th:value="${motivo.id}"
+                            th:text="${motivo.descrip}">
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- ESTADO -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Estado:
+            </label>
+
+            <div class="col-sm-5">
+
+                <select class="form-control"
+                        th:field="*{estado.id}">
+
+                    <option th:each="estado : ${estados}"
+                            th:value="${estado.id}"
+                            th:text="${estado.descrip}">
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- ASUNTO -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Asunto:
+            </label>
+
+            <div class="col-sm-5">
+
+                <input type="text"
+                       class="form-control"
+                       th:field="*{asunto}"/>
+
+            </div>
+
+        </div>
+
+
+        <!-- MENSAJE -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Mensaje:
+            </label>
+
+            <div class="col-sm-5">
+
+                        <textarea class="form-control"
+                                  rows="5"
+                                  th:field="*{mensaje}">
+                        </textarea>
+
+            </div>
+
+        </div>
+
+
+        <!-- OBSERVACIONES -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Observaciones:
+            </label>
+
+            <div class="col-sm-5">
+
+                        <textarea class="form-control"
+                                  rows="4"
+                                  th:field="*{observaciones}">
+                        </textarea>
+
+            </div>
+
+        </div>
+
+
+        <!-- FINALIZADO -->
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Finalizado:
+            </label>
+
+            <div class="col-sm-1">
+
+                <input type="checkbox"
+                       th:field="*{finalizado}"/>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOTONES -->
+
+        <div class="form-group">
+
+            <div class="col-sm-offset-2 col-sm-5">
+
+                <button type="submit"
+                        class="btn btn-success">
+                    Guardar
+                </button>
+
+                <a class="btn btn-default"
+                   th:href="@{/clientes}">
+                    Volver
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

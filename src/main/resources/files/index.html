@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:insert="~{top :: top}"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:insert="~{header :: header}"></th:block> /*/-->
+
+    <h2>Archivos del Reclamo</h2>
+
+    <h4>
+        Asunto:
+        <span th:text="${reclamo.asunto}"></span>
+    </h4>
+
+    <p>
+        Cliente:
+        <strong th:text="${reclamo.cliente.nombre + ' ' + reclamo.cliente.apellido}">
+        </strong>
+    </p>
+
+    <hr>
+
+    <h4>Agregar Archivo</h4>
+
+    <form class="form-horizontal"
+          th:object="${entity}"
+          th:action="@{/reclamos/{reclamoId}/files(reclamoId=${reclamo.id})}"
+          method="post">
+
+        <input type="hidden"
+               th:field="*{id}"/>
+
+        <div class="form-group">
+
+            <label class="control-label col-sm-2">
+                Archivo:
+            </label>
+
+            <div class="col-sm-5">
+
+                <input type="text"
+                       class="form-control"
+                       th:field="*{file}"
+                       placeholder="Nombre o ruta del archivo"/>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-sm-offset-2 col-sm-5">
+
+                <button type="submit"
+                        class="btn btn-success">
+                    Agregar
+                </button>
+
+                <a class="btn btn-default"
+                   th:href="@{/reclamos/cliente/{clienteId}(clienteId=${reclamo.cliente.id})}">
+                    Volver
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <hr>
+
+    <h4>Archivos Asociados</h4>
+
+    <div th:if="${not #lists.isEmpty(entities)}">
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Archivo</th>
+                <th>Eliminar</th>
+            </tr>
+
+            <tr th:each="archivo : ${entities}">
+
+                <td th:text="${archivo.file}"></td>
+
+                <td>
+                    <a class="btn btn-danger"
+                       th:href="@{/reclamos/{reclamoId}/files/delete/{id}
+                               (reclamoId=${reclamo.id}, id=${archivo.id})}">
+                        Eliminar
+                    </a>
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div th:if="${#lists.isEmpty(entities)}">
+
+        <div class="alert alert-info">
+            Este reclamo todavía no tiene archivos asociados.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

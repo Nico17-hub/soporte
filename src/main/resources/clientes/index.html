@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:insert="~{top :: top}"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:insert="~{header :: header}"></th:block> /*/-->
+
+    <h2>Clientes</h2>
+
+    <div class="row">
+
+        <div class="col-sm-5">
+
+            <form class="form-horizontal"
+                  th:object="${entity}"
+                  th:action="@{/clientes/search}"
+                  method="post">
+
+                <div class="row">
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{apellido}"/>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button type="submit"
+                                class="btn btn-success">
+                            Buscar
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col-sm-1">
+
+            <a class="btn btn-info"
+               th:href="@{/clientes/refresh}">
+                Refrescar
+            </a>
+
+        </div>
+
+        <div class="col-sm-1">
+
+            <a class="btn btn-default"
+               th:href="@{/clientes/create/0}">
+                Nuevo
+            </a>
+
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div th:if="${not #lists.isEmpty(entities)}">
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Documento</th>
+                <th>Tipo Doc.</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Usuario</th>
+                <th>Servicios</th>
+                <th>Reclamos</th>
+                <th>Editar</th>
+                <th>Borrar</th>
+            </tr>
+
+            <tr th:each="entity : ${entities}">
+
+                <td th:text="${entity.nombre}"></td>
+
+                <td th:text="${entity.apellido}"></td>
+
+                <td th:text="${entity.nrodoc}"></td>
+
+                <td th:text="${entity.tipodoc.descrip}"></td>
+
+                <td th:text="${entity.email}"></td>
+
+                <td th:text="${entity.telefono}"></td>
+
+                <td th:text="${entity.usuario.username}"></td>
+
+                <td>
+                    <a class="btn btn-primary"
+                       th:href="@{/contratos/{clienteId}(clienteId=${entity.id})}">
+                        Servicios
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-info"
+                       th:href="@{/reclamos/cliente/{clienteId}(clienteId=${entity.id})}">
+                        Reclamos
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-warning"
+                       th:href="@{/clientes/edit/{id}(id=${entity.id})}">
+                        Editar
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-danger"
+                       th:href="@{/clientes/delete/{id}(id=${entity.id})}">
+                        Borrar
+                    </a>
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

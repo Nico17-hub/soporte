@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--/*/ <th:block th:insert="~{top :: top}"></th:block> /*/-->
+
+<body>
+
+<div class="container">
+
+    <!--/*/ <th:block th:insert="~{header :: header}"></th:block> /*/-->
+
+    <h2>Estados de Reclamo</h2>
+
+    <div class="row">
+
+        <div class="col-sm-5">
+
+            <form class="form-horizontal"
+                  th:object="${entity}"
+                  th:action="@{/reclamosestados/search}"
+                  method="post">
+
+                <div class="row">
+
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{descrip}"/>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button type="submit"
+                                class="btn btn-success">
+                            Buscar
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col-sm-1">
+            <a class="btn btn-info"
+               th:href="@{/reclamosestados/refresh}">
+                Refrescar
+            </a>
+        </div>
+
+        <div class="col-sm-1">
+            <a class="btn btn-default"
+               th:href="@{/reclamosestados/create/0}">
+                Nuevo
+            </a>
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div th:if="${not #lists.isEmpty(entities)}">
+
+        <table class="table">
+
+            <tr>
+                <th>Id</th>
+                <th>Descripción</th>
+                <th>Prioridad</th>
+                <th>Baja</th>
+                <th>Editar</th>
+                <th>Borrar</th>
+            </tr>
+
+            <tr th:each="entity : ${entities}">
+
+                <td th:text="${entity.id}"></td>
+                <td th:text="${entity.descrip}"></td>
+                <td th:text="${entity.prioridad}"></td>
+                <td th:text="${entity.baja ? 'Sí' : 'No'}"></td>
+
+                <td>
+                    <a class="btn btn-warning"
+                       th:href="@{/reclamosestados/edit/{id}(id=${entity.id})}">
+                        Editar
+                    </a>
+                </td>
+
+                <td>
+                    <a class="btn btn-danger"
+                       th:href="@{/reclamosestados/delete/{id}(id=${entity.id})}">
+                        Borrar
+                    </a>
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

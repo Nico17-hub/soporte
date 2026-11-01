@@ -1,0 +1,102 @@
+package ar.com.soporte.controller;
+
+import ar.com.soporte.entities.Roles;
+import ar.com.soporte.services.IRolesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class RolesController {
+
+    @Autowired
+    IRolesService entityService;
+
+    @RequestMapping(value = "/roles", method = RequestMethod.GET)
+    public String list(Model model, Pageable pageable) {
+
+        Page<Roles> page = entityService.findAll(pageable);
+
+        model.addAttribute("entities", page.getContent());
+        model.addAttribute("entity", new Roles());
+
+        return "../roles/index";
+    }
+
+    @RequestMapping("roles/refresh")
+    public String refresh() {
+        return "redirect:/roles";
+    }
+
+    @RequestMapping(value = "roles/search", method = RequestMethod.POST)
+    public String search(Model model, Roles entity) {
+
+        if (entity.getDescrip().equals("")) {
+            return refresh();
+        }
+
+        model.addAttribute(
+                "entities",
+                entityService.findByDescrip(entity.getDescrip())
+        );
+
+        model.addAttribute("entity", new Roles());
+
+        return "../roles/index";
+    }
+
+    @RequestMapping("roles/create/{id}")
+    public String create(@PathVariable Integer id, Model model) {
+
+        model.addAttribute("entity", new Roles());
+
+        return "../roles/edit";
+    }
+
+    @RequestMapping("roles/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model) {
+
+        model.addAttribute(
+                "entity",
+                entityService.get(id)
+        );
+
+        return "../roles/edit";
+    }
+
+    @RequestMapping(value = "roles", method = RequestMethod.POST)
+    public String save(Model model, @Validated Roles entity) {
+
+        if (entity.getDescrip().equals("")) {
+
+            model.addAttribute(
+                    "message",
+                    "Descripción Incorrecta"
+            );
+
+            model.addAttribute("entity", entity);
+
+            return "../roles/edit";
+        }
+
+        entityService.save(entity);
+
+        return "redirect:/roles";
+    }
+
+    @RequestMapping("roles/delete/{id}")
+    public String delete(@PathVariable Integer id) {
+
+        Roles entity = entityService.get(id);
+
+        entityService.delete(entity);
+
+        return "redirect:/roles";
+    }
+}
